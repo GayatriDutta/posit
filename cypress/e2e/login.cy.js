@@ -33,6 +33,10 @@ describe('template spec', () => {
 
   it('create rs studio project test case', () => {
     cy.createRsStudioProject()
+    cy.wait(40000)
+    cy.frameLoaded('#contentIFrame')
+    cy.get('.rsc-breadcrumb > a > span').click()
+
   })
 
 
@@ -60,16 +64,22 @@ describe('template spec', () => {
     }).as('createProject')
 
     cy.createRsStudioProject()
-    cy.wait(10000)
 
     //response for the api that create and store new project 
     cy.wait('@createProject',).its('response.statusCode').should('eq', 201)
+    cy.wait(20000)
 
     //response for the project that loading iframe script file
     cy.wait('@loads',).its('response.statusCode').should('eq', 200)
     cy.wait(10000) 
 
     cy.frameLoaded('#contentIFrame')
+
+    cy.get('.rsc-breadcrumb > a > span').click()
+
+    cy.get('.sectionTitleDetails').contains('1')
+    cy.get('.itemType').children('span').contains('RStudio Project')
+
   })
 
 })
