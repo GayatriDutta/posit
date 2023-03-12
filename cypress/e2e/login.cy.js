@@ -8,12 +8,27 @@ describe('template spec', () => {
     cy.Login("irtaya123@gmail.com","Unicorn@123")
   })
 
+  afterEach(() =>{
+    cy.get('#headerTitle').click()
+    cy.get('.nullSpace').click()
+    cy.get('body').find('.itemDetails').its('length').then(res=>{
+      if(res > 0){
+        cy.get('.itemDetails').each(($el)=>{
+          cy.wrap($el).children('.itemHeader').children('.actionBar').children('.trashProject').click()
+        })
+      }else{
+          reject();
+      }
+    });
+  })
+
 
   it('create space test case', () => {
     cy.wait(100)
     cy.get('#spaceOwner').click()
     cy.get('.newSpace').click()
     cy.createSpace('new space')
+    cy.get('.modalClose').click()
   })
 
   it('create rs studio project test case', () => {
